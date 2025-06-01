@@ -92,6 +92,7 @@ class Evaluator:
 
         # Create a temporary file for the program
         with tempfile.NamedTemporaryFile(suffix=".py", delete=False) as temp_file:
+            temp_file.name = temp_file.name.replace('\\', '/')
             temp_file.write(program_code.encode("utf-8"))
             temp_file_path = temp_file.name
 

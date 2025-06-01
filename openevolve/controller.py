@@ -5,7 +5,9 @@ Main controller for OpenEvolve
 import asyncio
 import logging
 import os
+import io
 import re
+import sys
 import time
 import uuid
 from pathlib import Path
@@ -101,14 +103,20 @@ class OpenEvolve:
 
         # Add file handler
         log_file = os.path.join(log_dir, f"openevolve_{time.strftime('%Y%m%d_%H%M%S')}.log")
-        file_handler = logging.FileHandler(log_file)
+        file_handler = logging.FileHandler(log_file, encoding="utf-8")
         file_handler.setFormatter(
             logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         )
         root_logger.addHandler(file_handler)
 
         # Add console handler
-        console_handler = logging.StreamHandler()
+        utf8_console = io.TextIOWrapper(
+            sys.stdout.buffer,
+            encoding="utf-8",
+            errors="replace",
+            line_buffering=True
+        )
+        console_handler = logging.StreamHandler(stream=utf8_console)
         console_handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
         root_logger.addHandler(console_handler)
 

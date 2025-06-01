@@ -67,8 +67,12 @@ def run_with_timeout(program_path, timeout_seconds=20):
     Returns:
         centers, radii, sum_radii tuple from the program
     """
+    # Fix windows backslash path errors
+    program_path = program_path.replace('\\', '/')
+
     # Create a temporary file to execute
     with tempfile.NamedTemporaryFile(suffix=".py", delete=False) as temp_file:
+        temp_file.name = temp_file.name.replace('\\', '/')
         # Write a script that executes the program and saves results
         script = f"""
 import sys
